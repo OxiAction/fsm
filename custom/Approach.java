@@ -4,8 +4,8 @@ import fsm.*;
 
 public class Approach extends StateAtomic {
 	
-	public Approach(StateInterface state) {
-		super(state);
+	public Approach() {
+		super("Approach");
 	}
 
 	@Override

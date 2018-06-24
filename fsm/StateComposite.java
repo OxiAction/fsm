@@ -5,14 +5,14 @@ import java.util.List;
 
 import event.Event;
 
-public class StateNormal extends StateDecorator {
+public class StateComposite extends State {
 	// childs of this State
 	protected List<StateInterface> childs = new ArrayList<StateInterface>();
 	// transitions of this State
 	protected List<Transition> transitions = new ArrayList<Transition>();
 	
-	public StateNormal(StateInterface state) {
-		super(state);
+	public StateComposite(String name) {
+		super(name);
 	}
 
 	/**
@@ -43,8 +43,8 @@ public class StateNormal extends StateDecorator {
 					}
 				}
 				
-				if (child instanceof StateNormal) {
-					((StateNormal) child).updateTransitions();
+				if (child instanceof StateComposite) {
+					((StateComposite) child).updateTransitions();
 				}
 			}
 		}

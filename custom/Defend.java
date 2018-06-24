@@ -4,8 +4,8 @@ import fsm.*;
 
 public class Defend extends StateAtomic {
 	
-	public Defend(StateInterface state) {
-		super(state);
+	public Defend() {
+		super("Defend");
 	}
 
 	@Override

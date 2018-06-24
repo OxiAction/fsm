@@ -13,20 +13,20 @@ public class Main {
 	// SETUP STATES
 		
 		// AI FSM (root)
-		StateNormal ai = new StateNormal(new StateBasic("AI"));
+		StateComposite ai = new StateComposite("AI");
 		
 		// Movement FSM
-		StateNormal movement = new StateNormal(new StateBasic("Movement"));
-		StateAtomic idle = new Idle(new StateBasic("Idle"));
-		StateAtomic approach = new Approach(new StateBasic("Approach"));
+		StateComposite movement = new StateComposite("Movement");
+		StateAtomic idle = new Idle();
+		StateAtomic approach = new Approach();
 		movement.addChild(idle);
 		movement.addChild(approach);
 		ai.addChild(movement);
 		
 		// Combat FSM
-		StateNormal combat = new StateNormal(new StateBasic("Combat"));
-		StateAtomic attack = new Attack(new StateBasic("Attack"));
-		StateAtomic defend = new Defend(new StateBasic("Defend"));
+		StateComposite combat = new StateComposite("Combat");
+		StateAtomic attack = new Attack();
+		StateAtomic defend = new Defend();
 		combat.addChild(attack);
 		combat.addChild(defend);
 		ai.addChild(combat);

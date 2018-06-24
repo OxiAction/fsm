@@ -3,7 +3,7 @@ package fsm;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StateBasic implements StateInterface {
+public class State implements StateInterface {
 	// transitions of this State
 	protected List<Transition> transitions = new ArrayList<Transition>();
 	// determine if this State is active or not
@@ -13,10 +13,10 @@ public class StateBasic implements StateInterface {
 	// name of the State
 	protected String name;
 	
-	public StateBasic(String name) {
+	public State(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * Recursive execution of all childs
 	 */

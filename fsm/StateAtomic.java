@@ -1,8 +1,8 @@
 package fsm;
 
-public class StateAtomic extends StateDecorator {
-	public StateAtomic(StateInterface state) {
-		super(state);
+public class StateAtomic extends State {
+	public StateAtomic(String name) {
+		super(name);
 	}
 	
 	@Override
