@@ -10,46 +10,52 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-	// SETUP STATES
+	// FINITE STATE MACHINES
 		
-		// AI FSM (root)
 		StateComposite ai = new StateComposite("AI");
-		
-		// Movement FSM
 		StateComposite movement = new StateComposite("Movement");
+		StateComposite combat = new StateComposite("Combat");
+		
+	// MOVEMENT SETUP
+		movement.addTransition(new Transition(combat, "enemy-in-range"));
+		
 		StateAtomic idle = new Idle();
 		StateAtomic approach = new Approach();
+		
 		movement.addChild(idle);
 		movement.addChild(approach);
-		ai.addChild(movement);
-		
-		// Combat FSM
-		StateComposite combat = new StateComposite("Combat");
-		StateAtomic attack = new Attack();
-		StateAtomic defend = new Defend();
-		combat.addChild(attack);
-		combat.addChild(defend);
-		ai.addChild(combat);
-
-	// SETUP TRANSITIONS
+		// DEFAULT
+		movement.setDefault(idle);
 		
 		idle.addTransition(new Transition(approach, "enemy-line-of-sight"));
-		
 		approach.addTransition(new Transition(idle, "enemy-dead"));
-		approach.addTransition(new Transition(attack, "enemy-in-range"));
+		
+	// COMBAT SETUP
+		combat.addTransition(new Transition(movement, "!enemy-in-range"));
+		// OR
+		combat.addTransition(new Transition(movement, "enemy-dead"));
+		
+		StateAtomic attack = new Attack();
+		StateAtomic defend = new Defend();
+		
+		combat.addChild(attack);
+		combat.addChild(defend);
+		// DEFAULT
+		combat.setDefault(attack);
 		
 		attack.addTransition(new Transition(defend, "defense-available-AND-defense-alert"));
-		attack.addTransition(new Transition(approach, "!enemy-in-range"));
-		// OR
-		attack.addTransition(new Transition(approach, "enemy-dead"));
-		
 		defend.addTransition(new Transition(attack, "!defense-available"));
 		// OR
 		defend.addTransition(new Transition(attack, "!defense-alert"));
-
-	// SET DEFAULT
 		
-		idle.setActive(true);
+	// AI
+		ai.addChild(movement);
+		ai.addChild(combat);
+		// DEFAULT & ACTIVE
+		ai.setDefault(movement);
+		ai.setActive(movement);
+		
+		movement.setActive(movement.getDefault());
 		
 	// MISC
 
@@ -63,11 +69,8 @@ public class Main {
 				String eventName = bufferedReader.readLine();
 				Event.setName(eventName.trim());
 
-				System.out.println("\n*** AI updateTransitions() ***");
-				ai.updateTransitions();
-
-				System.out.println("\n*** AI execute() ***");
-				ai.execute();
+				System.out.println("\n*** AI update() ***");
+				ai.update();
 
 				Event.setName("");
 

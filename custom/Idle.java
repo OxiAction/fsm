@@ -5,7 +5,7 @@ import fsm.*;
 public class Idle extends StateAtomic {
 	
 	public Idle() {
-		super("Defend");
+		super("Idle");
 	}
 
 	@Override

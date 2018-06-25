@@ -12,23 +12,27 @@ public class State implements StateInterface {
 	protected StateInterface parent;
 	// name of the State
 	protected String name;
+	// default state
+	protected StateInterface defaultState;
+	// active state
+	protected StateInterface activeState;
 	
 	public State(String name) {
 		this.name = name;
 	}
-
-	/**
-	 * Recursive execution of all childs
-	 */
+	
 	@Override
 	public void execute() {
+	}
+	
+	@Override
+	public void update() {
 	}
 	
 	@Override
 	public void addTransition(Transition transition) {
 		// inject this as fromState
 		transition.setFromState(this);
-
 		transitions.add(transition);
 	}
 	
@@ -48,22 +52,29 @@ public class State implements StateInterface {
 	}
 	
 	@Override
-	public void setActive(boolean active) {
-		this.active = active;
-
-		// bubble up!
-		if (this.parent != null) {
-			this.parent.setActive(active);
-		}
+	public void setActive(StateInterface activeState) {
+		System.out.println("setting active state @" + this.getName() + " to: " + activeState.getName());
+		this.activeState = activeState;
 	}
 	
 	@Override
-	public boolean getActive() {
-		return this.active;
+	public StateInterface getActive() {
+		return this.activeState;
 	}
 	
 	@Override
 	public String getName() {
 		return this.name;
+	}
+
+	@Override
+	public void setDefault(StateInterface defaultState) {
+		System.out.println("setting default state @" + this.getName() + " to: " + defaultState.getName());
+		this.defaultState = defaultState;
+	}
+	
+	@Override
+	public StateInterface getDefault() {
+		return this.defaultState;
 	}
 }

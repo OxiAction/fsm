@@ -14,52 +14,50 @@ public class StateComposite extends State {
 	public StateComposite(String name) {
 		super(name);
 	}
-
-	/**
-	 * Recursive update of all child transitions
-	 */
-	public void updateTransitions() {
-		for (StateInterface child : this.childs) {
-			if (child.getActive()) {
-				List<Transition> transitions = child.getTransitions();
-
-				// check for transitions
-				for (Transition transition : transitions) {
-
-					if (Event.getName().equals(transition.getEventName())) {
-
-						// deactivate "from state"
-						StateInterface fromState = transition.getFromState();
-						fromState.setActive(false);
-
-						// activate "to state"
-						StateInterface toState = transition.getToState();
-						toState.setActive(true);
-
-						System.out.println("=> transition details:");
-						System.out.println("eventName -> " + Event.getName());
-						System.out.println("deactivate -> " + fromState.getName());
-						System.out.println("activate -> " + toState.getName());
+	
+	public void update() {
+		if (this.getActive() == null) {
+			return;
+		}
+		
+		List<Transition> transitions = this.activeState.getTransitions();
+		
+		if (transitions != null) {
+			for (Transition transition : transitions) {
+				if (Event.getName() != null && Event.getName().equals(transition.getEventName())) {
+			
+					StateInterface fromState = transition.getFromState();
+					StateInterface toState = transition.getToState();
+					
+					if (fromState.getParent() != null) {
+						fromState.getParent().setActive(toState);
 					}
-				}
-				
-				if (child instanceof StateComposite) {
-					((StateComposite) child).updateTransitions();
+					
+					System.out.println("=> transition details:");
+					System.out.println("eventName -> " + Event.getName());
+					System.out.println("deactivate -> " + fromState.getName());
+					System.out.println("activate -> " + toState.getName());
+					
+					if (toState.getDefault() != null) {
+						toState.setActive(toState.getDefault());
+					}
+					
+					toState.execute();
+					toState.update();
+					
+					// leave here!
+					return;
 				}
 			}
 		}
+		
+		this.getActive().execute();
+		this.getActive().update();
 	}
 	
-	/**
-	 * Recursive execution of all childs
-	 */
 	@Override
 	public void execute() {
-		for (StateInterface child : this.childs) {
-			if (child.getActive()) {
-				child.execute();
-			}
-		}
+		System.out.println("=> executing " + this.getName() + " (default)");
 	}
 	
 	public void addChild(StateInterface state) {
