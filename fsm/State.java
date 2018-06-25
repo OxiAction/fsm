@@ -6,8 +6,6 @@ import java.util.List;
 public class State implements StateInterface {
 	// transitions of this State
 	protected List<Transition> transitions = new ArrayList<Transition>();
-	// determine if this State is active or not
-	protected boolean active;
 	// reference to parent State
 	protected StateInterface parent;
 	// name of the State

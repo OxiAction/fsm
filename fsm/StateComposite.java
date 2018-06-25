@@ -6,8 +6,8 @@ import java.util.List;
 import event.Event;
 
 public class StateComposite extends State {
-	// childs of this State
-	protected List<StateInterface> childs = new ArrayList<StateInterface>();
+	// children of this State
+	protected List<StateInterface> children = new ArrayList<StateInterface>();
 	// transitions of this State
 	protected List<Transition> transitions = new ArrayList<Transition>();
 	
@@ -25,18 +25,16 @@ public class StateComposite extends State {
 		if (transitions != null) {
 			for (Transition transition : transitions) {
 				if (Event.getName() != null && Event.getName().equals(transition.getEventName())) {
-			
-					StateInterface fromState = transition.getFromState();
-					StateInterface toState = transition.getToState();
+					// target state
+					StateInterface toState = transition.getToState();	
 					
-					if (fromState.getParent() != null) {
-						fromState.getParent().setActive(toState);
-					}
+					// change active state
+					this.setActive(toState);
 					
 					System.out.println("=> transition details:");
 					System.out.println("eventName -> " + Event.getName());
-					System.out.println("deactivate -> " + fromState.getName());
-					System.out.println("activate -> " + toState.getName());
+					System.out.println("deactivate -> " + transition.getFromState().getName());
+					System.out.println("activate -> " + transition.getToState().getName());
 					
 					if (toState.getDefault() != null) {
 						toState.setActive(toState.getDefault());
@@ -61,11 +59,11 @@ public class StateComposite extends State {
 	}
 	
 	public void addChild(StateInterface state) {
-		childs.add(state);
+		children.add(state);
 		state.setParent(this);
 	}
 	
-	public List<StateInterface> getChilds() {
-		return this.childs;
+	public List<StateInterface> getChildren() {
+		return this.children;
 	}
 }
